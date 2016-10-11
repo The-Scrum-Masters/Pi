@@ -6,9 +6,6 @@ import json
 from pymongo import MongoClient
 import time
 
-#GLOBAL VARIABLES
-
-
 def read_config():
     with open('pi.cfg') as json_data:
         cfg = json.load(json_data)

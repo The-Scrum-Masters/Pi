@@ -24,11 +24,15 @@ def read_config():
     print("config read.")
 
 def config_mongo():
+    global client
     client = MongoClient(uri)
     global db
-    db = client.store
+    dbname = str(uri.split('/')[len(uri.split('/'))-1])
+    db = client[dbname]
     print("mongo configured.")
 
+def close_mongo():
+    client.close()
 
 def config_socket():
     global buf
@@ -42,7 +46,6 @@ def config_socket():
 
 def init():
     read_config()
-    config_mongo()
     config_socket()
     print("configuration successful.")
 
@@ -76,8 +79,10 @@ while True:
     if "trollid:" in data:
         data = data.split("trollid:")[1]
         try:
-
+            config_mongo()
             add_element(store,bay,data)
+            close_mongo()
+
         except :
             print "invalid message recieved"
 
